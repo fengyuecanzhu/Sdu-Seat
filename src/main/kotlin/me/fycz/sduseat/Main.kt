@@ -68,10 +68,6 @@ val authRunnable = Runnable {
 fun main(args: Array<String>) {
     printInfo()
     Config.initConfig(args)
-    if (config?.webVpn == true) {
-        logger.warn { "由于webVpn过于卡顿，为防止过于频繁的请求导致被ban，此版本暂时停用webVpn，请使用校园网进行预约" }
-        config?.webVpn = false
-    }
     date = dateFormat.format(System.currentTimeMillis() + ONE_DAY * config!!.delta)
     if (config!!.bookOnce) {
         startBook()
