@@ -72,7 +72,7 @@ object Lib {
             } catch (e: Exception) {
                 continue
             }
-            if (!json.get("msg").asString.contains("预约超时".toRegex()))
+            if (!json.get("msg").asString.contains("预约超时"))
                 break
         }
         val status = json!!.get("status").asInt
