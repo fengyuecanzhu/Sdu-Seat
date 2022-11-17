@@ -1,0 +1,18 @@
+{
+  "userid": "201805139999",
+  "passwd": "abc123",
+  "area": "威海馆-主楼(3-10)",
+  "seats": {
+    "三楼阅览室": ["001", "011"],
+    "四楼阅览室": ["011", "012"]
+  },
+  "filterRule": "",
+  "only": false,
+  "time": "12:32:00",
+  "period": "08:00-22:30",
+  "retry": 10,
+  "retryInterval": 30,
+  "delta": 0,
+  "bookOnce": false,
+  "webVpn": false
+}

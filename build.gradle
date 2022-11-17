@@ -1,0 +1,56 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group 'me.fycz'
+version '2.4'
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io"}
+}
+
+// 构建可执行 jar 包，运行依赖jar内容会直接打到 jar 里面
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'me.fycz.sduseat.Main'
+    }
+    archiveClassifier.set('')
+
+    exclude("me.fycz.sduseat.config")
+
+    // 将 build.gradle 打入到 jar 中, 方便查看依赖包版本
+    from("./"){
+        include 'build.gradle'
+    }
+}
+
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    //Okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    //gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+    //logger
+    implementation 'io.github.microutils:kotlin-logging:2.1.21'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    implementation 'org.slf4j:slf4j-log4j12:1.7.36'
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.14.3'
+    //rhino
+    implementation 'org.mozilla:rhino-engine:1.7.14'
+
+    //tgBot
+    //implementation 'org.telegram:telegrambots-abilities:5.7.1'
+}
+
+test {
+    useJUnitPlatform()
+}
