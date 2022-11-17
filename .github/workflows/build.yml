@@ -1,0 +1,21 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build With Gradle
+        run: |
+          chmod +x gradlew
+          gradlew
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Sdu-Seat
+          path: build/libs/*.jar
