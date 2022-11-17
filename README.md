@@ -11,7 +11,7 @@
 
 ### 获取jar包
 
-从[Release](https://github.com/fengyuecanzhu/Sdu-Seat/releases/)下载或者[自行编译](#编译)
+从[Release](https://github.com/fengyuecanzhu/Sdu-Seat/releases/)/[Actions](https://github.com/fengyuecanzhu/Sdu-Seat/actions/workflows/build.yml)下载或者[自行编译](#编译)
 
 ### 运行
 
