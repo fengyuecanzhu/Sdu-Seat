@@ -13,8 +13,6 @@ import javax.script.ScriptEngineManager
  * @date 2022/2/15 10:51
  */
 object Const {
-    const val VERSION = 2
-    const val UPDATE_URL = "http://101.43.83.105:3000/fengyue/FYReader-Res/raw/branch/main/Plugin/sdu-seat/update.json"
     const val UA_NAME = "User-Agent"
     const val USER_AGENT =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36"

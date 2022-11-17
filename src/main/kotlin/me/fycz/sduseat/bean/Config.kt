@@ -1,7 +1,6 @@
 package me.fycz.sduseat.bean
 
 import me.fycz.sduseat.AppException
-import me.fycz.sduseat.CCWebVpn
 import me.fycz.sduseat.config
 import me.fycz.sduseat.constant.Const
 import me.fycz.sduseat.constant.Const.logger
@@ -20,7 +19,7 @@ data class Config(
     var seats: LinkedHashMap<String, ArrayList<String>> = LinkedHashMap(),
     var filterRule: String = "",
     var only: Boolean = false,
-    var time: String = "06:02",
+    var time: String = "12:32",
     var period: String = "08:00-22:30",
     var retry: Int = 10,
     var retryInterval: Int = 2,

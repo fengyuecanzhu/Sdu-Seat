@@ -3,38 +3,27 @@
 package me.fycz.sduseat
 
 import me.fycz.sduseat.api.*
-import me.fycz.sduseat.bean.*
+import me.fycz.sduseat.bean.AreaBean
+import me.fycz.sduseat.bean.Config
+import me.fycz.sduseat.bean.PeriodBean
+import me.fycz.sduseat.bean.SeatBean
 import me.fycz.sduseat.constant.Const
 import me.fycz.sduseat.constant.Const.ONE_DAY
-import me.fycz.sduseat.constant.Const.SCRIPT_ENGINE
-import me.fycz.sduseat.constant.Const.UPDATE_URL
-import me.fycz.sduseat.constant.Const.VERSION
 import me.fycz.sduseat.constant.Const.dateFormat
-import me.fycz.sduseat.constant.Const.defaultConfig
 import me.fycz.sduseat.constant.Const.logger
-import me.fycz.sduseat.constant.Const.periodFormat
 import me.fycz.sduseat.http.cookieCathe
-import me.fycz.sduseat.http.getProxyClient
-import me.fycz.sduseat.http.newCallResponseBody
-import me.fycz.sduseat.http.text
-import me.fycz.sduseat.utils.GSON
 import me.fycz.sduseat.utils.JsUtils
-import me.fycz.sduseat.utils.fromJsonObject
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
-import javax.script.SimpleBindings
-import kotlin.system.exitProcess
 
 
 /**
  * @author fengyue
  * @date 2022/2/22 17:54
  */
-var CCWebVpn = false
 var config: Config? = null
 var date: String = ""
 var area: AreaBean? = null
@@ -61,8 +50,7 @@ val authRunnable = Runnable {
 fun main(args: Array<String>) {
     printInfo()
     Config.initConfig(args)
-    checkUpdate()
-    if (!CCWebVpn && config?.webVpn == true) {
+    if (config?.webVpn == true) {
         logger.warn { "由于webVpn过于卡顿，为防止过于频繁的请求导致被ban，此版本暂时停用webVpn，请使用校园网进行预约" }
         config?.webVpn = false
     }
@@ -286,34 +274,6 @@ fun isInPeriod(periodBean: PeriodBean): Boolean {
 
 fun printInfo() {
     println(Const.javaClass.getResource("/banner.txt")?.readText())
-}
-
-fun checkUpdate() {
-    logger.info { "正在检查更新" }
-    val content = getProxyClient().newCallResponseBody { url(UPDATE_URL) }.text()
-    val updateConfig = GSON.fromJsonObject<UpdateConfig>(content)
-    if (updateConfig == null) {
-        logger.error { "检查更新失败" }
-        exitProcess(0)
-    } else {
-        if (updateConfig.newVersion == VERSION) {
-            logger.info { "已是最新版本" }
-        } else {
-            logger.error { "发现新版本，此版本已停用" }
-            if (updateConfig.url.isNotEmpty()) {
-                logger.info { "更新日志：\n${updateConfig.updateLog}" }
-                logger.info { "地址：${updateConfig.url}" }
-            }
-            exitProcess(0)
-        }
-        if (updateConfig.isWhiteList &&
-            !config!!.userid.matches(updateConfig.whiteListRegex.toRegex())
-        ) {
-            logger.error { "发现新版本，此版本已停用" }
-            exitProcess(0)
-        }
-        CCWebVpn = updateConfig.webVpn
-    }
 }
 
 fun clear() {
