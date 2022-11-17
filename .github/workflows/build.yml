@@ -13,7 +13,7 @@ jobs:
       - name: Build With Gradle
         run: |
           chmod +x gradlew
-          gradlew
+          ./gradlew shadowjar
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
