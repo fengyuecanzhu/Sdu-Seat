@@ -52,7 +52,7 @@ chmod +x gradlew
 ./gradlew shadowjar # 编译
 ```
 
-* 编译后的 JAR 文件会/build/lib/目录下生成
+* 编译后的 JAR 文件会/build/libs/目录下生成
 
 ### 参数说明
 
