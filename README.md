@@ -7,6 +7,7 @@
 ### 安装Java
 
 本项目使用运行于JVM的kotlin进行编写，使用前请先安装Java
+
 安装教程：[各系统安装Java教程](https://cloud.tencent.com/developer/article/1957454)
 
 ### 获取jar包
@@ -54,7 +55,7 @@ chmod +x gradlew
 
 * 编译后的 JAR 文件会/build/libs/目录下生成
 
-### 参数说明
+## 参数说明
 
 在`config/config.json`里填写的参数，`Key`必须为下列的参数名称之一，`Value`则填写对应获取的值
 
@@ -78,7 +79,7 @@ chmod +x gradlew
 
 ![威海馆-主楼（3-12）](img/img.png)
 
-#### 过滤规则
+### 过滤规则
 
 * 过滤规则为JavaScript脚本
 * 运行脚本时将会传入两个参数：
@@ -111,6 +112,6 @@ chmod +x gradlew
 }
 ```
 
-### 感谢
+## 感谢
 
 * [sdu-lib-seat](https://github.com/PTYin/sdu-lib-seat)
