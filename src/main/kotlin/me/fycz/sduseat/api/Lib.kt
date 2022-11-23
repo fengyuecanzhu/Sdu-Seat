@@ -30,6 +30,7 @@ import me.fycz.sduseat.http.postForm
 import me.fycz.sduseat.http.text
 import me.fycz.sduseat.utils.GSON
 import me.fycz.sduseat.utils.parseString
+import java.net.SocketTimeoutException
 
 /**
  * @author fengyue
@@ -63,8 +64,11 @@ object Lib {
                         "$LIB_URL/web/seat3?area=${area.id}&segment=${period.id}&day=$date&startTime=${period.startTime}&endTime=${period.endTime}"
                     )
                 }.text()
+            } catch (e: SocketTimeoutException) {
+                logger.error() { "预约座位失败：网络请求超时，正在重试" }
+                continue
             } catch (e: Exception) {
-                logger.error(e) { "预约座位：网络请求失败，正在重试" }
+                logger.error(e) { "预约座位失败：网络请求出错，正在重试" }
                 continue
             }
             try {

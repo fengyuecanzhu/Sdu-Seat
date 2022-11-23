@@ -31,11 +31,13 @@ import me.fycz.sduseat.constant.Const.dateFormat
 import me.fycz.sduseat.constant.Const.logger
 import me.fycz.sduseat.http.cookieCathe
 import me.fycz.sduseat.utils.JsUtils
+import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
+import kotlin.math.log
 
 
 /**
@@ -74,8 +76,7 @@ fun main(args: Array<String>) {
     } else {
         try {
             loginAndGetSeats()
-        } catch (e: Exception) {
-            logger.error(e) { }
+        } catch (ignored: Exception) {
         }
     }
     val sdf = SimpleDateFormat("yyyy-MM-dd " + config!!.time)
@@ -110,7 +111,11 @@ fun loginAndGetSeats(judgeExpire: Boolean = true) {
         try {
             authRes.get()
         } catch (e: Exception) {
-            logger.error(e) { }
+            if (e.cause is SocketTimeoutException) {
+                logger.error() { "登录失败：网络请求超时" }
+            } else {
+                logger.error(e) { }
+            }
             throw e
         }
     }
@@ -120,7 +125,11 @@ fun loginAndGetSeats(judgeExpire: Boolean = true) {
     try {
         spiderRes?.get()
     } catch (e: Exception) {
-        logger.error(e) { }
+        if (e.cause is SocketTimeoutException) {
+            logger.error() { "获取座位信息失败：网络请求超时" }
+        } else {
+            logger.error(e) { }
+        }
         throw e
     }
 }
@@ -165,7 +174,11 @@ fun bookTask() {
         try {
             it.get()
         } catch (e: Exception) {
-            logger.error(e) { }
+            if (e.cause is LibException) {
+                logger.error() { e.message }
+            } else {
+                logger.error(e) { }
+            }
             hasFailed = true
         }
     }
@@ -173,7 +186,12 @@ fun bookTask() {
     clear()
 }
 
-fun bookSeat(seats: List<SeatBean>, periodIndex: Int = 0, periodTime: String = "08:00-22:30", needFilter: Boolean = true): Boolean {
+fun bookSeat(
+    seats: List<SeatBean>,
+    periodIndex: Int = 0,
+    periodTime: String = "08:00-22:30",
+    needFilter: Boolean = true
+): Boolean {
     var success = false
     var mySeats = seats
     if (needFilter && config!!.filterRule.isNotEmpty()) {
