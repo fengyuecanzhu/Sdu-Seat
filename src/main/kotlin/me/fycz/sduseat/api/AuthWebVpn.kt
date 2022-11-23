@@ -75,16 +75,16 @@ class AuthWebVpn(
             })
         }
         if (res.code != 200) {
-            throw AuthException("阶段1：响应状态码为${res.code}, 信息化门户认证失败")
+            throw AuthException("阶段1/3：响应状态码为${res.code}, 信息化门户认证失败")
         }
         var resText = res.body?.text() ?: throw AuthException("阶段1：信息化门户认证失败")
         var doc = Jsoup.parse(resText)
         var title = doc.title()
         if (title == "山东大学信息化公共服务平台") {
             name = doc.selectFirst("#user-btn-01")?.text() ?: ""
-            logger.info { "阶段1：信息化门户认证成功，欢迎$name" }
+            logger.info { "阶段1/3：信息化门户认证成功，欢迎$name" }
         } else {
-            throw AuthException("阶段1：响应页面为$title, 信息化门户认证失败")
+            throw AuthException("阶段1/3：响应页面为$title, 信息化门户认证失败")
         }
 
         //登录图书馆
@@ -92,15 +92,15 @@ class AuthWebVpn(
             url(libAuthUrl)
         }
         if (res.code != 200) {
-            throw AuthException("阶段2：响应状态码为${res.code}, 图书馆认证失败")
+            throw AuthException("阶段2/3：响应状态码为${res.code}, 图书馆认证失败")
         }
-        resText = res.body?.text() ?: throw AuthException("阶段2：图书馆认证失败")
+        resText = res.body?.text() ?: throw AuthException("阶段2/3：图书馆认证失败")
         doc = Jsoup.parse(resText)
         title = doc.title()
         if (title == "跳转提示") {
-            logger.info { "阶段2：图书馆认证成功" }
+            logger.info { "阶段2/3：图书馆认证成功" }
         } else {
-            throw AuthException("阶段2：响应页面为$title, 图书馆认证失败")
+            throw AuthException("阶段2/3：响应页面为$title, 图书馆认证失败")
         }
     }
 
@@ -109,14 +109,14 @@ class AuthWebVpn(
             url(Const.LIB_FIRST_URL)
         }
         if (res.code != 200) {
-            throw AuthException("阶段3：响应状态码为${res.code}, access_token获取失败")
+            throw AuthException("阶段3/3：响应状态码为${res.code}, access_token获取失败")
         }
         val resText = res.body?.text() ?: throw AuthException("阶段3：access_token获取失败")
         val accessToken = resText.centerString("'access_token':\"", "\"")
         if (accessToken.isEmpty()) {
-            throw AuthException("阶段3：access_token获取失败")
+            throw AuthException("阶段3/3：access_token获取失败")
         } else {
-            logger.info { "阶段3：access_token获取成功，access_token=$accessToken" }
+            logger.info { "阶段3/3：access_token获取成功，access_token=$accessToken" }
         }
         return accessToken
     }
