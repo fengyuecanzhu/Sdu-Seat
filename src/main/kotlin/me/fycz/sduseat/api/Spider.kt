@@ -85,20 +85,23 @@ object Spider {
             val allSeats = it.get("TotalCount").asInt
             val unusedSeats = allSeats - it.get("UnavailableSpace").asInt
             var periods: List<PeriodBean>? = null
+
             if (it.has("area_times")) {
                 periods = mutableListOf()
-                val periodArr = it.getAsJsonObject("area_times").getAsJsonObject("data")
-                    .getAsJsonArray("list").asJsonArray.map { period -> period.asJsonObject }
-                periodArr.forEach { period ->
-                    val periodBean = PeriodBean(
-                        period.get("bookTimeId").asInt,
-                        period.get("startTime").asString,
-                        period.get("endTime").asString,
-                        if (period.has("beginTime"))
-                            period.getAsJsonObject("beginTime").get("date").asString
-                        else ""
-                    )
-                    periods.add(periodBean)
+                kotlin.runCatching {
+                    val periodArr = it.getAsJsonObject("area_times").getAsJsonObject("data")
+                        .getAsJsonArray("list").asJsonArray.map { period -> period.asJsonObject }
+                    periodArr.forEach { period ->
+                        val periodBean = PeriodBean(
+                            period.get("bookTimeId").asInt,
+                            period.get("startTime").asString,
+                            period.get("endTime").asString,
+                            if (period.has("beginTime"))
+                                period.getAsJsonObject("beginTime").get("date").asString
+                            else ""
+                        )
+                        periods.add(periodBean)
+                    }
                 }
             }
             areaMap[name] = AreaBean(id, name, unusedSeats, allSeats, periods)
