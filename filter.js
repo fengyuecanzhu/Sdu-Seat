@@ -27,7 +27,7 @@ for (let i = 0; i < seats.length; i++) {
     //获取当前座位区域名称
     let areaName = seat.getArea().getName()
     //获取当前座位座位号
-    let id = seat.getName()
+    let id = parseInt(seat.getName())
     //进行过滤
     if (areaName == '九楼阅览室' || areaName == '十楼阅览室') {
         //九楼十楼不过滤
