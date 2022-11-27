@@ -47,6 +47,8 @@ data class Config(
 ) {
     constructor(webVpn: Boolean) : this("", "", "", webVpn = webVpn)
 
+    constructor() : this("", "", "")
+
     companion object {
         fun initConfig(args: Array<String>) {
             val configPath = if (args.isEmpty()) {
@@ -59,6 +61,9 @@ data class Config(
                 throw AppException("$configPath 配置文件不存在")
             } else {
                 config = GSON.fromJsonObject<Config>(configFile.readText())?.apply {
+                    if (userid.isEmpty() || passwd.isEmpty() || area.isEmpty()) {
+                        throw AppException("未配置userid/passwd/area")
+                    }
                     if (time.isEmpty()) time = "12:32"
                     if (period.isEmpty()) period = "08:00-22:30"
                     if (!period.matches(Const.periodFormat)) {
