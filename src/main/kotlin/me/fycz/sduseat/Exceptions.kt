@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Sdu-Seat.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C)  2022 fengyuecanzhu
+ * Copyright (C)  2022~2023 fengyuecanzhu
  */
 
 @file:Suppress("unused")
