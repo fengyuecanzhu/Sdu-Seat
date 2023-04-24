@@ -1,21 +1,3 @@
-/*
- * This file is part of Sdu-Seat
- * Sdu-Seat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Sdu-Seat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Sdu-Seat.  If not, see <https://www.gnu.org/licenses/>.
- *
- * Copyright (C)  2022 fengyuecanzhu
- */
-
 package me.fycz.sduseat.api
 
 import me.fycz.sduseat.AuthException
@@ -36,7 +18,9 @@ class Auth(
     password: String,
     retry: Int = 0
 ) : IAuth(userid, password, retry) {
-    override val authUrl: String = "$LIB_URL/cas/index.php"
+    override val authUrl: String = "$LIB_URL/cas/index.php?callback=https://libseat.sdu.edu.cn/home/web/f_second"
+
+    private val host: String = "libseat.sdu.edu.cn"
 
     override fun login() {
         //GET 图书馆认证界面 302 -> 统一身份认证界面
@@ -50,7 +34,7 @@ class Auth(
         //统一身份认证、图书馆认证
         auth(res.request.url)
         //如果最终获取到这几个必要cookie则说明登陆成功
-        val cookies = cookieCathe["seat.lib.sdu.edu.cn"]!!
+        val cookies = cookieCathe[host]!!
         if (cookies.contains("userid") && cookies.contains("user_name")
             && cookies.contains("access_token")
         ) {
@@ -87,7 +71,7 @@ class Auth(
         // 切换HEADER绕过检查再进行重定向
         res = getProxyClient().newCallResponse(retry) {
             url(URLDecoder.decode(newUrl, "UTF-8"))
-            header("Host", "seat.lib.sdu.edu.cn")
+            header("Host", host)
         }
         logger.debug { "Status code for auth-2-response is ${res.code}" }
         if (res.code != 200) {
@@ -96,8 +80,7 @@ class Auth(
     }
 
     override fun isExpire(): Boolean {
-        cookieCathe["seat.lib.sdu.edu.cn"]?.get("expire")?.value?.let {
-            //2022-03-19 18:36:51
+        cookieCathe[host]?.get("expire")?.value?.let {
             kotlin.runCatching {
                 if (timeDateFormat.parse(URLDecoder.decode(it)).time > System.currentTimeMillis()) {
                     return false

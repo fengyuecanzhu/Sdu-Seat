@@ -37,7 +37,7 @@ object Const {
     val LIB_URL: String
         get() {
             return if (config?.webVpn != true) {
-                "http://seat.lib.sdu.edu.cn"
+                "https://libseat.sdu.edu.cn"
                 //"http://seatwx.lib.sdu.edu.cn:85"
             } else {
                 "https://webvpn.sdu.edu.cn/http/77726476706e69737468656265737421e3f24088693c6152301b8db9d6502720e38b79"
