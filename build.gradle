@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group 'me.fycz'
-version '2.5'
+version '2.6'
 
 repositories {
     mavenCentral()
