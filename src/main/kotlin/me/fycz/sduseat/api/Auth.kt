@@ -34,8 +34,9 @@ import kotlin.collections.HashMap
 class Auth(
     userid: String,
     password: String,
+    deviceId: String,
     retry: Int = 0
-) : IAuth(userid, password, retry) {
+) : IAuth(userid, password, deviceId, retry) {
     override val authUrl: String = "$LIB_URL/cas/index.php?callback=https://libseat.sdu.edu.cn/home/web/f_second"
 
     private val host: String = "libseat.sdu.edu.cn"

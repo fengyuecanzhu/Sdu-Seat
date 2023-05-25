@@ -32,8 +32,9 @@ import org.jsoup.Jsoup
 class AuthWebVpn(
     userid: String,
     password: String,
+    deviceId: String,
     retry: Int = 0
-) : IAuth(userid, password, retry) {
+) : IAuth(userid, password, deviceId, retry) {
     override val authUrl: String = "https://webvpn.sdu.edu.cn/https/77726476706e69737468656265737421e0f6528f69236c45300d8db9d6562d/cas/login?service=http%3A%2F%2Fseat.lib.sdu.edu.cn%2Fcas%2Findex.php%3Fcallback%3Dhttp%3A%2F%2Fseat.lib.sdu.edu.cn%2Fhome%2Fweb%2Ff_second"
     private val libAuthUrl =
         "https://webvpn.sdu.edu.cn/http/77726476706e69737468656265737421e3f24088693c6152301b8db9d6502720e38b79/cas/index.php?callback=http://seat.lib.sdu.edu.cn/home/web/f_second"

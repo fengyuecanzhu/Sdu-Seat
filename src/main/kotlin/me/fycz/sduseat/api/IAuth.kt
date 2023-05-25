@@ -19,7 +19,6 @@
 package me.fycz.sduseat.api
 
 import me.fycz.sduseat.AuthException
-import me.fycz.sduseat.config
 import me.fycz.sduseat.constant.Const
 import me.fycz.sduseat.constant.Const.DEVICE_URL
 import me.fycz.sduseat.constant.Const.SCRIPT_ENGINE
@@ -34,6 +33,7 @@ import javax.script.Invocable
 abstract class IAuth(
     val userid: String,
     val password: String,
+    val deviceId: String,
     val retry: Int = 0
 ) {
     abstract val authUrl: String
@@ -81,7 +81,7 @@ abstract class IAuth(
             url(DEVICE_URL)
             postForm(
                 mapOf(
-                    "d" to config?.deviceId!!,
+                    "d" to deviceId,
                     "m" to 1,
                     "u" to strEnc(user),
                     "p" to strEnc(password),

@@ -61,8 +61,8 @@ val spiderRunnable = Runnable {
 }
 
 val authRunnable = Runnable {
-    auth = if (config!!.webVpn) AuthWebVpn(config!!.userid!!, config!!.passwd!!, config!!.retry)
-    else Auth(config!!.userid!!, config!!.passwd!!, config!!.retry)
+    auth = if (config!!.webVpn) AuthWebVpn(config!!.userid!!, config!!.passwd!!, config!!.deviceId!!, config!!.retry)
+    else Auth(config!!.userid!!, config!!.passwd!!, config!!.deviceId!!, config!!.retry)
     auth!!.login()
     needReLogin = false
 }
