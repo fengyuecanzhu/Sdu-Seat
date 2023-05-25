@@ -21,7 +21,7 @@
 
 ### 获取jar包
 
-从[Release](https://github.com/fengyuecanzhu/Sdu-Seat/releases/)/[Actions](https://github.com/fengyuecanzhu/Sdu-Seat/actions/workflows/build.yml)下载或者[自行编译](#编译)
+从[Release](https://github.com/fengyuecanzhu/Sdu-Seat/releases/)/[Actions](https://github.com/fengyuecanzhu/Sdu-Seat/actions/workflows/build.yml)下载或者[自行编译](#自行编译)
 
 ### 运行
 
@@ -35,7 +35,7 @@ java -jar sdu-seat.jar
 # java -jar sdu-seat.jar 配置文件路径
 ```
 
-### 编译
+## 自行编译
 
 项目 使用 Gradle 来处理依赖及编译。
 
@@ -44,7 +44,7 @@ java -jar sdu-seat.jar
 - [Java SE Development Kits](https://www.oracle.com/java/technologies/downloads/)
 - [Git](https://git-scm.com/downloads)
 
-#### Windows
+### Windows
 
 ```shell
 git clone https://github.com/fengyuecanzhu/Sdu-Seat.git
@@ -53,7 +53,7 @@ cd Sdu-Seat
 .\gradlew shadowjar # 编译
 ```
 
-#### Linux
+### Linux
 
 ```bash
 git clone https://github.com/fengyuecanzhu/Sdu-Seat.git
