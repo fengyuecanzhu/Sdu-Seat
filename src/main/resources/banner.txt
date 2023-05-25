@@ -3,6 +3,6 @@
  / __|   \| | | |___/ __| __| /_\_   _|
  \__ \ |) | |_| |___\__ \ _| / _ \| |
  |___/___/ \___/    |___/___/_/ \_\_|
- :: Sdu-Seat ::          (v2.6.RELEASE)
+ :: Sdu-Seat ::          (v2.7.RELEASE)
  山东大学图书馆自动选座脚本
  Copyright ©2022~2023 fengyuecanzhu<https://github.com/fengyuecanzhu/>.All Rights Reserved.
