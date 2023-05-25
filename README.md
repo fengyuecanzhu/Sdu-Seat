@@ -106,7 +106,7 @@ chmod +x gradlew
 ![](./img/verify.png)
 
 * 第三步，成功登录后直接退出登录，或者关闭浏览器后再次使用之前的浏览器打开信息化门户登录界面
-* 第四步，在登录界面按`F12`，选择控制台，在控制台中输入下面的代码，回车，然后就会输出设备ID
+* 第四步，在登录界面按`F12`，选择控制台，复制下面的代码粘贴到控制台，回车，然后就会输出设备ID
 
 ```js
 Fingerprint2.get(function(components){console.log(Fingerprint2.x64hash128(components.map(function(pair){return pair.value}).join(),31));})
