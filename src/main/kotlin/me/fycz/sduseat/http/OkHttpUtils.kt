@@ -18,9 +18,11 @@
 
 package me.fycz.sduseat.http
 
+import com.google.gson.JsonElement
 import me.fycz.sduseat.constant.Const
 import me.fycz.sduseat.utils.GSON
 import me.fycz.sduseat.utils.Utf8BomUtils
+import me.fycz.sduseat.utils.parseString
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -78,6 +80,9 @@ fun ResponseBody.text(encode: String? = null): String {
     }
 
     return String(responseBytes, Charset.forName(charsetName ?: "UTF-8"))
+}
+fun ResponseBody.json(encode: String? = null): JsonElement {
+    return GSON.parseString(text(encode))
 }
 
 fun Request.Builder.addHeaders(headers: Map<String, String>) {

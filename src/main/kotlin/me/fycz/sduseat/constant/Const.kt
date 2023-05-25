@@ -47,6 +47,8 @@ object Const {
     val LIB_FIRST_URL: String
         get() = "$LIB_URL/home/web/f_second"
 
+    const val DEVICE_URL: String = "https://pass.sdu.edu.cn/cas/device"
+
     val periodFormat = "[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}".toRegex()
     val dateFormat by lazy { SimpleDateFormat("yyyy-MM-dd") }
     val timeDateFormat by lazy { SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()) }

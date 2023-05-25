@@ -3,6 +3,9 @@
 山东大学图书馆自动预约脚本，支持webVpn
 
 ## 近期更新
+``2023-05-25``
+* 新增了设备ID(deviceId)配置(必需)，用于通过二次验证，详细说明查看：[设备id获取说明](#获取设备id)
+
 ``2023-04-24``
 
 * 学校图书馆更换了新域名，修复了无法登录的问题(注：webvpn由于学校还未开放新域名的访问权限，暂时无法使用，待学校开放后修复)
@@ -64,21 +67,22 @@ chmod +x gradlew
 
 在`config/config.json`里填写的参数，`Key`必须为下列的参数名称之一，`Value`则填写对应获取的值
 
-| 参数名 |   类型    | 必需  |                             说明                             |
-| :----: | :-------: | :---: | :----------------------------------------------------------: |
-| userid |   String  | true  |                        山东大学学工号                        |
-| passwd |   String  | true  |                   山东大学统一身份认证密码                   |
-|  area  |   String  | true  |                        图书馆-子馆                          |
-| seats  | Map<String, List<String>> | true | key为楼层，value为想要该楼层约的座位，如果列出的座位均已无法约用，或没提供value，则在空闲的座位进行约座 |
-| filterRule | String | false | 座位过滤规则，为js脚本，填写js脚本文件地址或者以@js:开头的js脚本文本，详细请查看[过滤规则说明](#过滤规则) |
-| only | boolean | false | 是否只预约预设座位（即seats中的座位），默认为false |
-|  time  |    String    | false | 发起约座的时间，若没提供该参数，则在12:32分开始约当天的位置 |
-| period | String | false | 需要预约的时间段，格式为 hh:mm-hh:mm，默认为08:00-22:30 |
-| delta  |    int    | false |  0代表预约当天，1代表预约第二天，以此类推，默认预约当天 |
-| retry  |    int    | false | 如果约座失败（网络原因等）重试的次数，默认不重试  |
-| retryInterval | int | false | 预约失败重试时间间隔，默认30s |
-| bookOnce |  boolean  | false | 是否立即进行一次选座，默认不执行 |
-| webVpn | boolean | false | 是否使用webVpn，默认不使用 |
+|      参数名      |   类型    |  必需   |                              说明                              |
+|:-------------:| :-------: |:-----:|:------------------------------------------------------------:|
+|    userid     |   String  |  ✅  |                           山东大学学工号                            |
+|    passwd     |   String  | ✅  |                         山东大学统一身份认证密码                         |
+|   deviceId    |   String  | ✅  |                  设备ID，必需填写，否则无法登录(二次认证)，请查看[设备id获取说明](#获取设备id)                  |
+|     area      |   String  | ✅  |                            图书馆-子馆                            |
+|     seats     | Map<String, List<String>> | ✅  |  key为楼层，value为想要该楼层约的座位，如果列出的座位均已无法约用，或没提供value，则在空闲的座位进行约座  |
+|  filterRule   | String | ❌ | 座位过滤规则，为js脚本，填写js脚本文件地址或者以@js:开头的js脚本文本，详细请查看[过滤规则说明](#过滤规则) |
+|     only      | boolean | ❌ |                是否只预约预设座位（即seats中的座位），默认为false                |
+|     time      |    String    | ❌ |               发起约座的时间，若没提供该参数，则在12:32分开始约当天的位置               |
+|    period     | String | ❌ |           需要预约的时间段，格式为 hh:mm-hh:mm，默认为08:00-22:30            |
+|     delta     |    int    | ❌ |                 0代表预约当天，1代表预约第二天，以此类推，默认预约当天                 |
+|     retry     |    int    | ❌ |                   如果约座失败（网络原因等）重试的次数，默认不重试                   |
+| retryInterval | int | ❌ |                       预约失败重试时间间隔，默认30s                       |
+|   bookOnce    |  boolean  | ❌ |                       是否立即进行一次选座，默认不执行                       |
+|    webVpn     | boolean | ❌ |                       是否使用webVpn，默认不使用                       |
 
 - 特别注意area参数要规范，是官网该楼层的标题**去掉最后的座位**二字，比如`威海馆-主楼（3-12）`从下图中获得
 
@@ -93,6 +97,21 @@ chmod +x gradlew
 * 过滤完成后需要返回结果，返回类型须是JS中的Array或者Java中的List/Array，其元素类型须是SeatBean
 * 例子：[filter.js](./filter.js)
 
+### 获取设备id
+
+* 第一步，在你的浏览器打开信息化门户登录界面，如果无需二次认证能够直接登录，转到第三步，否则转到第二步
+* 第二步，在二次认证对话框中选择信任此设备，然后获取验证码进行登录
+
+![](./img/verify.png)
+
+* 第三步，成功登录后直接退出登录，或者关闭浏览器后再次使用之前的浏览器打开信息化门户登录界面
+* 第四步，在登录界面按`F12`，选择控制台，在控制台中输入下面的代码，回车，然后就会输出设备ID
+
+```js
+Fingerprint2.get(function(components){console.log(Fingerprint2.x64hash128(components.map(function(pair){return pair.value}).join(),31));})
+```
+
+![](./img/deviceId.png)
 
 ### Example
 
@@ -100,6 +119,7 @@ chmod +x gradlew
 {
   "userid": "201805139999",
   "passwd": "abc123",
+  "deviceId": "a3297db6e98622d94d4252eadaa32f0c",
   "area": "威海馆-主楼(3-10)",
   "seats": {
     "三楼阅览室": ["001", "011"],

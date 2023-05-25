@@ -61,8 +61,8 @@ val spiderRunnable = Runnable {
 }
 
 val authRunnable = Runnable {
-    auth = if (config!!.webVpn) AuthWebVpn(config!!.userid, config!!.passwd, config!!.retry)
-    else Auth(config!!.userid, config!!.passwd, config!!.retry)
+    auth = if (config!!.webVpn) AuthWebVpn(config!!.userid!!, config!!.passwd!!, config!!.retry)
+    else Auth(config!!.userid!!, config!!.passwd!!, config!!.retry)
     auth!!.login()
     needReLogin = false
 }
@@ -80,7 +80,7 @@ fun main(args: Array<String>) {
         }
     }
     val sdf = SimpleDateFormat("yyyy-MM-dd " + config!!.time)
-    var startTime = if (config!!.time.length == 8) {
+    var startTime = if (config!!.time!!.length == 8) {
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sdf.format(Date()))
     } else {
         SimpleDateFormat("yyyy-MM-dd HH:mm").parse(sdf.format(Date()))
@@ -194,9 +194,9 @@ fun bookSeat(
 ): Boolean {
     var success = false
     var mySeats = seats
-    if (needFilter && config!!.filterRule.isNotEmpty()) {
+    if (needFilter && !config!!.filterRule.isNullOrEmpty()) {
         try {
-            mySeats = JsUtils.filterSeats(config!!.filterRule, seats)
+            mySeats = JsUtils.filterSeats(config!!.filterRule!!, seats)
         } catch (e: Exception) {
             logger.error(e) { "过滤座位时出错，将使用原座位进行预约" }
         }
@@ -220,8 +220,8 @@ fun getAllSeats() {
     allSeats.clear()
     querySeats.clear()
     if (area == null) {
-        val libName = config!!.area.substringBefore("-")
-        val subLibName = config!!.area.substringAfter("-")
+        val libName = config!!.area!!.substringBefore("-")
+        val subLibName = config!!.area!!.substringAfter("-")
         //获取图书馆信息
         val lib = Spider.getAreas(Spider.getLibs()[libName], date, config!!.retry)
         area = lib[subLibName]
@@ -261,7 +261,7 @@ fun getSeats(subLib: Map<String, AreaBean>, periodIndex: Int = 0, periodTime: St
     var log = "\n-------------获取$date ${periodTime}时间段座位-------------\n"
     val curQuerySeats = mutableListOf<SeatBean>()
     val curAllSeats = mutableListOf<SeatBean>()
-    config!!.seats.forEach { (k, v) ->
+    config!!.seats!!.forEach { (k, v) ->
         if (subLib.keys.contains(k)) {
             //获取座位信息
             val curSeats = Spider.getSeats(subLib[k], date, periodIndex, config!!.retry)
@@ -297,8 +297,8 @@ fun getSeats(subLib: Map<String, AreaBean>, periodIndex: Int = 0, periodTime: St
 }
 
 fun isInPeriod(periodBean: PeriodBean): Boolean {
-    val start = config!!.period.substringBefore("-")
-    val end = config!!.period.substringAfter("-")
+    val start = config!!.period!!.substringBefore("-")
+    val end = config!!.period!!.substringAfter("-")
     val left = if (start < periodBean.startTime) periodBean.startTime else start
     val right = if (end > periodBean.endTime) periodBean.endTime else end
     return left < right

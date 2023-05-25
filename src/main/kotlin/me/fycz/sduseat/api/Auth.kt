@@ -47,6 +47,8 @@ class Auth(
         }
         //从统一身份认证界面获取必要信息
         gatherInfo(res.body?.text() ?: "")
+        //验证Device
+        device(userid, password)
         //获得rsa
         rsa = getRsa(userid, password, lt)
         //统一身份认证、图书馆认证

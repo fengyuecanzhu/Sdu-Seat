@@ -19,12 +19,13 @@
 package me.fycz.sduseat.api
 
 import me.fycz.sduseat.AuthException
+import me.fycz.sduseat.config
 import me.fycz.sduseat.constant.Const
+import me.fycz.sduseat.constant.Const.DEVICE_URL
 import me.fycz.sduseat.constant.Const.SCRIPT_ENGINE
+import me.fycz.sduseat.http.*
 import org.jsoup.Jsoup
-import java.io.File
 import javax.script.Invocable
-import javax.script.ScriptEngineManager
 
 /**
  * @author fengyue
@@ -46,12 +47,16 @@ abstract class IAuth(
     protected var expire: String? = null
 
     fun getRsa(user: String, pwd: String, lt: String): String {
+        return strEnc(user + pwd + lt)
+    }
+
+    fun strEnc(str: String): String {
         val js = String(javaClass.getResourceAsStream("/des.js").readBytes())
         SCRIPT_ENGINE.eval(js)
         if (SCRIPT_ENGINE is Invocable) {
             return SCRIPT_ENGINE.invokeFunction(
                 "strEnc",
-                user + pwd + lt, "1", "2", "3"
+                str, "1", "2", "3"
             ) as String
         }
         return ""
@@ -69,6 +74,30 @@ abstract class IAuth(
         if (lt.isEmpty() || execution.isEmpty() || _eventId.isEmpty()) {
             throw AuthException("未获取到用户登陆所需的所有信息")
         }
+    }
+
+    fun device(user: String, password: String) {
+        val res = getProxyClient().newCallResponse(retry) {
+            url(DEVICE_URL)
+            postForm(
+                mapOf(
+                    "d" to config?.deviceId!!,
+                    "m" to 1,
+                    "u" to strEnc(user),
+                    "p" to strEnc(password),
+                )
+            )
+        }
+        val info = when (res.body?.json()?.asJsonObject?.get("info")?.asString) {
+            "validErr" -> "用户名密码有误"
+            "notFound" -> "用户名密码有误"
+            "bind" -> "需要进行二次验证"
+            "mobileErr" -> "尚未绑定手机"
+            "binded" -> ""
+            "pass" -> ""
+            else -> "未知错误"
+        }
+        if (info.isNotEmpty()) throw AuthException("设备验证失败：$info")
     }
 
     abstract fun login()
