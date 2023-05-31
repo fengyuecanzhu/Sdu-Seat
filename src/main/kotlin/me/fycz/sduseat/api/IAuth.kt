@@ -23,6 +23,8 @@ import me.fycz.sduseat.constant.Const
 import me.fycz.sduseat.constant.Const.DEVICE_URL
 import me.fycz.sduseat.constant.Const.SCRIPT_ENGINE
 import me.fycz.sduseat.http.*
+import me.fycz.sduseat.utils.GSON
+import me.fycz.sduseat.utils.parseString
 import org.jsoup.Jsoup
 import javax.script.Invocable
 
@@ -82,13 +84,23 @@ abstract class IAuth(
             postForm(
                 mapOf(
                     "d" to deviceId,
+                    "d_s" to deviceId,
                     "m" to 1,
                     "u" to strEnc(user),
                     "p" to strEnc(password),
                 )
             )
         }
-        val info = when (res.body?.json()?.asJsonObject?.get("info")?.asString) {
+        val resBody = res.body?.text()!!
+        val resInfo = try {
+            GSON.parseString(resBody).asJsonObject?.get("info")?.asString?.trim()
+        } catch (e: Throwable) {
+            //{"info":"binded"}
+            val rIndex = resBody.lastIndexOf("\"")
+            val lIndex = resBody.lastIndexOf("\"", rIndex - 1)
+            resBody.substring(lIndex + 1, rIndex).trim()
+        }
+        val info = when (resInfo) {
             "validErr" -> "用户名密码有误"
             "notFound" -> "用户名密码有误"
             "bind" -> "需要进行二次验证"
