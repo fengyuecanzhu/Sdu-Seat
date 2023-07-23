@@ -85,6 +85,7 @@ abstract class IAuth(
                 mapOf(
                     "d" to deviceId,
                     "d_s" to deviceId,
+                    "d_md5" to deviceId,
                     "m" to 1,
                     "u" to strEnc(user),
                     "p" to strEnc(password),

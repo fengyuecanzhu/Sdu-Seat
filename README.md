@@ -3,6 +3,9 @@
 山东大学图书馆自动预约脚本
 
 ## 近期更新
+``2023-07-23``
+* 再次修复设备ID配置及其获取方式
+
 ``2023-05-31``
 * 修复设备ID配置及其获取方式
 
@@ -112,7 +115,7 @@ chmod +x gradlew
 * 第四步，在登录界面按`F12`，选择控制台，复制下面的代码粘贴到控制台，回车，然后就会输出设备ID
 
 ```js
-Fingerprint2.get(function(components){var details_s = "";for(var index in components){var obj = components[index];if(obj.key=='deviceMemory'||obj.key=='screenResolution'||obj.key=='availableScreenResolution'){continue;};var line = obj.key+" = "+String(obj.value).substr(0, 100);details_s+=line+"\n";};console.log(Fingerprint2.x64hash128(details_s,31));})
+Fingerprint2.get(function(components){var details_s = "";for(var index in components){var obj = components[index];if(obj.key=='deviceMemory'||obj.key=='screenResolution'||obj.key=='availableScreenResolution'){continue;};var line = obj.key+" = "+String(obj.value).substr(0, 100);details_s+=line+"\n";};console.log(hex_md5(details_s));})
 ```
 
 ![](./img/deviceId.png)
